@@ -40,8 +40,32 @@ router.post("/create", async (req, res) => {
     });
 });
 
-router.post("/delete", (req, res) => {
-    //TO BE DONE
+router.post("/delete", async (req, res) => {
+    const { cId } = req.body;
+    if (!cId || cId.length != 24)
+        return res.json({
+            error: "DON'T TRY TO EXPLOIT.",
+        });
+    let comment = await Comment.findById(cId);
+    if (!comment)
+        return res.json({
+            error: "NO SUCH COMMENT FOUND",
+        });
+    if (comment.user != req.user._id) {
+        return res.json({
+            error: "YOU ARE NOT PERMITTED TO PERFORM THIS ACTION.",
+        });
+    }
+    comment.remove();
+    res.json({
+        message: "COMMENT DELETED SUCCESSFULLY",
+    });
+    // Comment.findByIdAndDelete(cId, (err) => {
+    //     if (err)
+    //         return res.json({
+    //             error: "Error while deleting comment",
+    //         });
+    // });
 });
 
 module.exports = router;
