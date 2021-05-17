@@ -26,5 +26,5 @@ const setUser = (req, res, next) => {
 Router.use("/comment", setUser, require("./CommentRoutes/"));
 Router.use("/post", setUser, require("./PostRoutes/"));
 Router.use("/user", require("./UserRoutes/"));
-
+Router.use("/like/", setUser, require("./LikeRoutes"));
 module.exports = Router;

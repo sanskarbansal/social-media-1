@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-
+const Like = require("./Like");
+const Comment = require("./Comment");
 const Post = new mongoose.Schema(
     {
         user: {
@@ -28,5 +29,15 @@ const Post = new mongoose.Schema(
         timestamps: true,
     }
 );
+
+Post.post("remove", async (doc, next) => {
+    let comments = await Comment.find({ post: doc._id });
+    console.log("\x1b[31mDeleted ", comments.length, " Comments");
+    for (let comment of comments) {
+        await comment.remove();
+    }
+    await Like.deleteMany({ likeable: doc._id });
+    next();
+});
 
 module.exports = mongoose.model("post", Post);

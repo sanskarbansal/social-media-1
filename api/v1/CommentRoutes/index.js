@@ -31,6 +31,8 @@ router.post("/create", async (req, res) => {
             error: "NO POST FOUND ON WHICH USER IS COMMENTING",
         });
     let comment = await Comment.create({ post: postId, user: req.user._id, body });
+    await post.comments.push(comment._id);
+    await post.save();
     if (!comment)
         return res.json({
             error: "ERROR WHILE CREATING COMMENT",
@@ -56,16 +58,11 @@ router.post("/delete", async (req, res) => {
             error: "YOU ARE NOT PERMITTED TO PERFORM THIS ACTION.",
         });
     }
+    await Like.deleteMany({ likeable: cId });
     comment.remove();
     res.json({
         message: "COMMENT DELETED SUCCESSFULLY",
     });
-    // Comment.findByIdAndDelete(cId, (err) => {
-    //     if (err)
-    //         return res.json({
-    //             error: "Error while deleting comment",
-    //         });
-    // });
 });
 
 module.exports = router;

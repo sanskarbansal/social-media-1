@@ -4,8 +4,26 @@ const router = express.Router();
 const Comment = require("../../../models/Comment");
 const Like = require("../../../models/Like");
 
+//Get Comments of a perticular post
 router.get("/get", async (req, res) => {
-    let posts = await Post.find({});
+    let posts = await Post.find({})
+        .populate({
+            path: "comments",
+            select: "user likes body",
+            populate: {
+                path: "likes user",
+                select: "firstName lastName  user",
+                populate: {
+                    path: "user",
+                    select: "firstName lastName",
+                },
+            },
+        })
+        .populate({ path: "user", select: "firstName lastName " })
+        .populate({ path: "likes", select: "user", populate: { path: "user", select: "firstName lastName" } });
+    // .populate({ path: "comments", populate: { path: "user" } })
+    // .populate({ path: "comments", populate: { path: "likes" } })
+    // .populate({ path: "likes", populate: { path: "user" } });
     if (!posts)
         return res.status(404).json({
             error: "ERROR WHILE FETCHING POSTS.",
@@ -14,10 +32,11 @@ router.get("/get", async (req, res) => {
         ...posts,
     });
 });
+
+//Create a post;
 router.post("/create", async (req, res) => {
     const { body } = req.body;
-    const { _id } = req.user;
-    let post = await Post.create({ user: _id, body });
+    let post = await Post.create({ user: req.user._id, body });
     if (!post)
         return res.status(404).json({
             error: "ERROR OCCURRED WHILE CREATING A POST!",
@@ -27,6 +46,7 @@ router.post("/create", async (req, res) => {
     });
 });
 
+//Delete a post
 router.post("/delete", async (req, res) => {
     const { postId } = req.body;
     if (!postId || postId.length != 24)
@@ -38,25 +58,7 @@ router.post("/delete", async (req, res) => {
         return res.status(403).json({
             error: "YOU ARE NOT AUTHORISED TO PERFORM THIS ACTION.",
         });
-
-    Post.findByIdAndDelete(postId, (err) => {
-        if (err)
-            return res.json({
-                error: "ERROR WHILE DELETING LIKES OF POST",
-            });
-    });
-    Comment.deleteMany({ post: postId }, (err) => {
-        if (err)
-            return res.json({
-                error: "ERROR WHILE DELETING COMMENTS OF POST",
-            });
-    });
-    Like.deleteMany({ likeOf: "post", likeable: postId }, (err) => {
-        if (err)
-            return res.json({
-                error: "ERROR WHILE DELETING LIKES OF POST",
-            });
-    });
+    await post.remove(); //Likes and Comments associated with this post are deleted in pre("remove") hook, in mongoose middleware
     return res.json({
         message: "POST DELETED SUCCESFULLY",
     });
