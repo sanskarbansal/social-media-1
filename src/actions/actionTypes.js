@@ -1,2 +1,13 @@
 export const UPDATE_POSTS = "UPDATE_POSTS";
 export const SET_LOADING = "SET_LOADING";
+
+//LOGIN ACTION TYPES;
+export const LOGIN_START = "LOGIN_START";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_FAILED = "LOGIN_FAILED";
+
+//SIGN UP ACTIONS
+
+export const SIGNUP_START = "SIGNUP_START";
+export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
+export const SIGNUP_FAILED = "SIGNUP_FAILED";

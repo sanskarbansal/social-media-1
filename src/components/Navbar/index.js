@@ -66,8 +66,8 @@ const navLinks = [
 export default function Navbar() {
     const classes = useStyles();
     return (
-        <div>
-            <AppBar position="static">
+        <div style={{ marginBottom: 100 }}>
+            <AppBar position="fixed">
                 <Toolbar>
                     <Button
                         variant="outlined"
