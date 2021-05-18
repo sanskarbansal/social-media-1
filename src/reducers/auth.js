@@ -1,9 +1,10 @@
-import { LOGIN_START, LOGIN_FAILED, LOGIN_SUCCESS, SIGNUP_START, SIGNUP_FAILED, SIGNUP_SUCCESS } from "../actions/actionTypes";
+import { LOGIN_START, LOGIN_FAILED, LOGIN_SUCCESS, SIGNUP_START, SIGNUP_FAILED, SIGNUP_SUCCESS, RESET_SIGNUP } from "../actions/actionTypes";
 const initAuthState = {
     user: {},
     error: null,
     isLogegdIn: false,
     inProgress: false,
+    signUpSuccess: false,
 };
 export default function (state = initAuthState, action) {
     switch (action.type) {
@@ -12,12 +13,14 @@ export default function (state = initAuthState, action) {
             return {
                 ...state,
                 inProgress: true,
+                message: "",
+                error: "",
             };
         case LOGIN_SUCCESS:
             return {
                 ...state,
                 user: action.user,
-                isLogegdIn: true,
+                isLoggedIn: true,
                 inProgress: false,
                 error: null,
             };
@@ -28,6 +31,13 @@ export default function (state = initAuthState, action) {
                 inProgress: false,
                 error: null,
                 isLoggedIn: false,
+                signUpSuccess: true,
+            };
+        case RESET_SIGNUP:
+            return {
+                ...state,
+                signUpSuccess: false,
+                message: action.message,
             };
         case LOGIN_FAILED:
         case SIGNUP_FAILED:

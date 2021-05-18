@@ -1,13 +1,17 @@
 import "./App.css";
-import Navbar from "./Navbar/";
+import Navbar from "./Navbar/Navbar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core";
 import jwtdecode from "jwt-decode";
-
+import Dashboard from "./Dashboard/Dashboard";
 import { loginSuccess } from "../actions/auth";
 import Home from "./Home";
+import ProtectedRoute from "./ProtectedRoute";
+
+import Settings from "./Dashboard/Setting";
+
 const style = withStyles((theme) => {
     return {
         center: {
@@ -38,6 +42,8 @@ class App extends Component {
             <Router>
                 <Navbar />
                 <Switch>
+                    <ProtectedRoute path="/dashboard" component={Dashboard} />
+                    <ProtectedRoute path="/setting" component={Settings} />
                     <Route path="/" component={Home} />
                 </Switch>
             </Router>

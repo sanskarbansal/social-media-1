@@ -10,11 +10,6 @@ const styleMe = withStyles({
     fullWidth: {
         width: "100%",
     },
-    btnDisabled: {
-        "&$disabled": {
-            background: "pink !important",
-        },
-    },
 });
 
 class Login extends Component {
@@ -38,18 +33,9 @@ class Login extends Component {
     };
     render() {
         const { classes } = this.props;
-        const { error, inProgress } = this.props.auth;
+        const { inProgress } = this.props.auth;
         return (
             <Grid container alignItems="center" wrap="nowrap" direction="column" justify="space-evenly" spacing={1}>
-                <Grid item xs={11} md={8} className={classes.fullWidth}>
-                    {error && (
-                        <Paper variant="elevation" elevation={2} style={{ background: "#f2225a", color: "white" }}>
-                            <Typography variant="h6" align="center" style={{ padding: 5 }}>
-                                {error}
-                            </Typography>
-                        </Paper>
-                    )}
-                </Grid>
                 <Grid item md={8} xs={11} className={classes.fullWidth}>
                     <Paper variant="elevation" elevation={2} style={{ padding: 20 }} square>
                         <Grid container>
@@ -60,9 +46,6 @@ class Login extends Component {
                             </Grid>
                             <Grid item xs={12}>
                                 <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-                                    {/* <InputLabel color="secondary" variant="filled">
-                                        UserName
-                                    </InputLabel> */}
                                     <TextField
                                         id="username"
                                         onChange={this.handleChange}
@@ -82,7 +65,7 @@ class Login extends Component {
                                         autoComplete="off"
                                     />
 
-                                    <Button variant="contained" className={classes.btnDisabled} color="primary" type="submit" disabled={inProgress} fullWidth>
+                                    <Button variant="contained" color="primary" type="submit" disabled={inProgress} fullWidth>
                                         {inProgress ? <CircularProgress color="primary" /> : "Login"}
                                     </Button>
                                 </form>

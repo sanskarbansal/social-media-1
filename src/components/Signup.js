@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { TextField, Button, Grid, Typography, withStyles, Paper, CircularProgress } from "@material-ui/core";
-import { signup } from "../actions/auth";
+import { signup, resetSignup } from "../actions/auth";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 const styleMe = withStyles({
     field: {
@@ -68,63 +69,61 @@ class Signup extends Component {
         this.setState(
             {
                 [field]: event.target.value,
-                [field + "error"]: this._validate[field](event.target.value, this.state.password),
+                [field + "error"]: this._validate[field](event.target.value),
             },
             () => {
-                const {
-                    usernameerror,
-                    lastNameerror,
-                    emailerror,
-                    numbererror,
-                    passworderror,
-                    confirm_passworderror,
-                    username,
-                    lastName,
-                    email,
-                    number,
-                    password,
-                    confirm_password,
-                } = this.state;
-                this.setState({
-                    ...this.state,
-                    error:
-                        usernameerror ||
-                        lastNameerror ||
-                        emailerror ||
-                        numbererror ||
-                        passworderror ||
-                        confirm_passworderror ||
-                        !username ||
-                        !lastName ||
-                        !email ||
-                        !number ||
-                        !password ||
-                        !confirm_password,
+                this.setState({ ...this.state, confirm_passworderror: this.state.password !== this.state.confirm_password }, () => {
+                    const {
+                        usernameerror,
+                        lastNameerror,
+                        emailerror,
+                        numbererror,
+                        passworderror,
+                        confirm_passworderror,
+                        username,
+                        lastName,
+                        email,
+                        number,
+                        password,
+                        confirm_password,
+                    } = this.state;
+                    this.setState({
+                        ...this.state,
+                        error:
+                            usernameerror ||
+                            lastNameerror ||
+                            emailerror ||
+                            numbererror ||
+                            passworderror ||
+                            confirm_passworderror ||
+                            !username ||
+                            !lastName ||
+                            !email ||
+                            !number ||
+                            !password ||
+                            !confirm_password,
+                        confirm_passworderror: this.state.password !== this.state.confirm_password,
+                    });
                 });
             }
         );
     };
     handleSubmit = (event) => {
         event.preventDefault();
-        // this.validateForm(this.state);
-        this.props.dispatch(signup(this.state));
+        if (!this.state.error) this.props.dispatch(signup(this.state));
     };
 
     render() {
         const { classes } = this.props;
-        const { error, inProgress } = this.props.auth;
+        const { inProgress, signUpSuccess } = this.props.auth;
+
         const hts = { style: { fontSize: 9, marginLeft: 4, marginBottom: 5 } };
+        if (signUpSuccess) {
+            this.props.setLoginForm(true);
+            this.props.dispatch(resetSignup());
+        }
         return (
             <Grid container alignItems="center" wrap="nowrap" direction="column" justify="space-evenly" spacing={1}>
-                <Grid item xs={11} md={8} className={classes.fullWidth}>
-                    {error && (
-                        <Paper variant="elevation" elevation={2} style={{ background: "#f2225a", color: "white" }}>
-                            <Typography variant="h6" align="center" style={{ padding: 5 }}>
-                                {error}
-                            </Typography>
-                        </Paper>
-                    )}
-                </Grid>
                 <Grid item md={8} xs={11} className={classes.fullWidth}>
                     <Paper variant="elevation" elevation={2} style={{ padding: 20 }} square>
                         <Grid container>
@@ -239,4 +238,4 @@ class Signup extends Component {
 const mapStateToProps = (state) => ({
     auth: state.auth,
 });
-export default connect(mapStateToProps)(styleMe(Signup));
+export default connect(mapStateToProps)(styleMe(withRouter(Signup)));

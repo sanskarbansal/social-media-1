@@ -1,4 +1,5 @@
-import { SET_LOADING, UPDATE_POSTS } from "./actionTypes";
+import { APIurls } from "../helpers/urls";
+import { ADD_POST, SET_LOADING, UPDATE_POSTS } from "./actionTypes";
 export const fetchPosts = () => {
     return (dispatch) => {
         const url = "https://jsonplaceholder.typicode.com/posts";
@@ -20,3 +21,22 @@ export const updatePosts = (posts) => ({
     type: UPDATE_POSTS,
     posts,
 });
+
+export const addPost = (post) => ({
+    type: ADD_POST,
+    post,
+});
+
+export const createPost = (post) => (dispatch) => {
+    console.log(post);
+    fetch(`${APIurls.createPost}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(post),
+    })
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+};

@@ -39,7 +39,7 @@ export const SideDrawer = ({ navLinks }) => {
             <IconButton edge="start" aria-label="menu" onClick={toggleDrawer(true)}>
                 <Menu fontSize="large" style={{ color: "white" }} />
             </IconButton>
-            <Drawer anchor="right" open={isOpen} onOpen={toggleDrawer(true)} onClose={toggleDrawer(false)}>
+            <Drawer anchor="right" open={isOpen} onClose={toggleDrawer(false)}>
                 <SideDrawerList navLinks={navLinks} toggleDrawer={toggleDrawer} />
             </Drawer>
         </>

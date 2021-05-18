@@ -1,4 +1,4 @@
-import { LOGIN_FAILED, LOGIN_START, LOGIN_SUCCESS, SIGNUP_FAILED, SIGNUP_START, SIGNUP_SUCCESS } from "./actionTypes";
+import { LOGIN_FAILED, LOGIN_START, LOGIN_SUCCESS, RESET_SIGNUP, SIGNUP_FAILED, SIGNUP_START, SIGNUP_SUCCESS } from "./actionTypes";
 import { APIurls } from "../helpers/urls";
 import jwtdecode from "jwt-decode";
 export const startLogin = () => ({
@@ -71,4 +71,7 @@ export const signup = (userDetails) => (dispatch) => {
         });
 };
 
-// export const startLogin = () => {};
+export const resetSignup = () => ({
+    type: RESET_SIGNUP,
+    message: "SIGNED UP SUCCESSFULLY",
+});

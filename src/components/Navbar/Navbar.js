@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Home from "@material-ui/icons/Home";
 import { SideDrawer } from "./SideDrawer";
 import SearchIcon from "@material-ui/icons/Search";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     search: {
@@ -55,38 +56,45 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const navLinks = [
-    { title: `about us`, path: `/about-us` },
-    { title: `product`, path: `/product` },
-    { title: `blog`, path: `/blog` },
-    { title: `contact`, path: `/contact` },
-    { title: `faq`, path: `/faq` },
-];
+// const navLinks = [
+//     { title: `about us`, path: `/about-us` },
+//     { title: `product`, path: `/product` },
+//     { title: `blog`, path: `/blog` },
+//     { title: `contact`, path: `/contact` },
+//     { title: `faq`, path: `/faq` },
+// ];
 
-export default function Navbar() {
+function Navbar(props) {
     const classes = useStyles();
+    const navLinks = [];
+    if (props.auth.isLoggedIn) {
+        const { firstName } = props.auth.user;
+        navLinks.push({ title: firstName, path: "/setting" });
+    }
     return (
         <div style={{ marginBottom: 80 }}>
             <AppBar position="fixed">
                 <Toolbar>
-                    <Button
-                        variant="outlined"
-                        aria-label="Home"
-                        style={{
-                            borderColor: "lightgrey",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-evenly",
-                            color: "white",
-                            cursor: "pointer",
-                            minWidth: "150px",
-                            fontSize: 15,
-                            padding: 0,
-                        }}
-                    >
-                        <p>Social Media</p>
-                        <Home />
-                    </Button>
+                    <Link to="/dashboard">
+                        <Button
+                            variant="outlined"
+                            aria-label="Home"
+                            style={{
+                                borderColor: "lightgrey",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-evenly",
+                                color: "white",
+                                cursor: "pointer",
+                                minWidth: "150px",
+                                fontSize: 15,
+                                padding: 0,
+                            }}
+                        >
+                            <p>Social Media</p>
+                            <Home />
+                        </Button>
+                    </Link>
                     <Hidden smDown>
                         <Container maxWidth="xs">
                             <div className={classes.search}>
@@ -127,3 +135,9 @@ export default function Navbar() {
         </div>
     );
 }
+
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+});
+
+export default connect(mapStateToProps)(Navbar);
