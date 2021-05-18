@@ -14,13 +14,15 @@ function CreatePost(props) {
     };
     const handleSubmit = () => {
         props.dispatch(createPost({ body: content }));
+        setisOpen(false);
     };
 
     return (
         <>
             <Grid container alignItems="stretch" justify="center" spacing={2}>
-                <Grid item md={8}>
+                <Grid item md={10} style={{ width: "100%" }}>
                     <TextField
+                        style={{ height: 10 }}
                         InputLabelProps={{
                             shrink: true,
                         }}

@@ -38,5 +38,8 @@ export const createPost = (post) => (dispatch) => {
         body: JSON.stringify(post),
     })
         .then((res) => res.json())
-        .then((data) => console.log(data));
+        .then((data) => {
+            dispatch(addPost(data));
+            console.log(data);
+        });
 };
