@@ -15,19 +15,20 @@ const useStyle = makeStyles({
 export default function Home() {
     const classes = useStyle();
     const [isLoginForm, setLoginForm] = useState(true);
-    console.log(isLoginForm);
     return (
-        <Grid container direction="column" alignItems="center" spacing={1}>
-            <Grid item className={classes.fullWidth} xs={8}>
+        <Grid container direction="column" alignItems="center">
+            <Grid item className={classes.fullWidth} xs={11} md={8}>
                 <Paper elevation={1}>
-                    <ButtonGroup fullWidth color="primary">
-                        <Button onClick={() => setLoginForm(1)} variant={`${isLoginForm ? "contained" : "outlined"}`}>
-                            Login
-                        </Button>
-                        <Button onClick={() => setLoginForm(0)} variant={`${!isLoginForm ? "contained" : "outlined"}`}>
-                            Sign Up
-                        </Button>
-                    </ButtonGroup>
+                    <CSSTransition in={!isLoginForm} timeout={300} classNames="jiggle">
+                        <ButtonGroup fullWidth color="primary">
+                            <Button onClick={() => setLoginForm(1)} variant={`${isLoginForm ? "contained" : "outlined"}`}>
+                                Login
+                            </Button>
+                            <Button onClick={() => setLoginForm(0)} variant={`${!isLoginForm ? "contained" : "outlined"}`}>
+                                Sign Up
+                            </Button>
+                        </ButtonGroup>
+                    </CSSTransition>
                 </Paper>
             </Grid>
             <Grid item className={classes.fullWidth} xs={12}>

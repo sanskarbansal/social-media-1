@@ -4,11 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core";
-import Login from "./Login";
-import Signup from "./Signup";
 import jwtdecode from "jwt-decode";
 
-import PropTypes from "prop-types";
 import { loginSuccess } from "../actions/auth";
 import Home from "./Home";
 const style = withStyles((theme) => {
@@ -37,7 +34,6 @@ class App extends Component {
     }
 
     render() {
-        const { posts, loading } = this.props.posts;
         return (
             <Router>
                 <Navbar />
@@ -48,10 +44,6 @@ class App extends Component {
         );
     }
 }
-
-App.propTypes = {
-    posts: PropTypes.array.isRequired,
-};
 
 const mapStateToProps = (state) => ({
     posts: state.posts,

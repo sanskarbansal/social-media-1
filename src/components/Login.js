@@ -40,7 +40,7 @@ class Login extends Component {
         const { classes } = this.props;
         const { error, inProgress } = this.props.auth;
         return (
-            <Grid container alignItems="center" wrap="nowrap" direction="column" justify="space-evenly" spacing={2}>
+            <Grid container alignItems="center" wrap="nowrap" direction="column" justify="space-evenly" spacing={1}>
                 <Grid item xs={11} md={8} className={classes.fullWidth}>
                     {error && (
                         <Paper variant="elevation" elevation={2} style={{ background: "#f2225a", color: "white" }}>
@@ -51,7 +51,7 @@ class Login extends Component {
                     )}
                 </Grid>
                 <Grid item md={8} xs={11} className={classes.fullWidth}>
-                    <Paper variant="elevation" elevation={2} style={{ padding: 20 }}>
+                    <Paper variant="elevation" elevation={2} style={{ padding: 20 }} square>
                         <Grid container>
                             <Grid item xs={12}>
                                 <Typography variant="h6" color="primary">
@@ -60,6 +60,9 @@ class Login extends Component {
                             </Grid>
                             <Grid item xs={12}>
                                 <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+                                    {/* <InputLabel color="secondary" variant="filled">
+                                        UserName
+                                    </InputLabel> */}
                                     <TextField
                                         id="username"
                                         onChange={this.handleChange}
@@ -67,6 +70,7 @@ class Login extends Component {
                                         label="username"
                                         variant="outlined"
                                         fullWidth
+                                        autoComplete="off"
                                     />
                                     <TextField
                                         id="password"
@@ -75,6 +79,7 @@ class Login extends Component {
                                         label="password"
                                         variant="outlined"
                                         fullWidth
+                                        autoComplete="off"
                                     />
 
                                     <Button variant="contained" className={classes.btnDisabled} color="primary" type="submit" disabled={inProgress} fullWidth>

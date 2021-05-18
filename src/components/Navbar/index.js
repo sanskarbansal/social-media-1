@@ -66,7 +66,7 @@ const navLinks = [
 export default function Navbar() {
     const classes = useStyles();
     return (
-        <div style={{ marginBottom: 100 }}>
+        <div style={{ marginBottom: 80 }}>
             <AppBar position="fixed">
                 <Toolbar>
                     <Button
