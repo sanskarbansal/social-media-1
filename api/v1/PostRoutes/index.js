@@ -37,6 +37,7 @@ router.get("/get", async (req, res) => {
 router.post("/create", async (req, res) => {
     const { body } = req.body;
     let post = await Post.create({ user: req.user._id, body });
+    post = await post.populate({ path: "user", select: "firstName lastName username" }).execPopulate();
     if (!post)
         return res.status(404).json({
             error: "ERROR OCCURRED WHILE CREATING A POST!",

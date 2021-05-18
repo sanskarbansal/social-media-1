@@ -26,7 +26,10 @@ const User = new Schema(
             type: Number,
             required: true,
         },
-        address: String,
+        address: {
+            type: String,
+            default: "India",
+        },
     },
     {
         timestamps: true,
