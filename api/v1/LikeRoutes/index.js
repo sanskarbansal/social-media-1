@@ -11,6 +11,7 @@ Router.post("/toggle", async (req, res) => {
             error: "PLEASE PROVIDE ID.",
         });
     let likeable,
+        likeId,
         likeOf,
         deleted = false;
     likeable = await Post.findById(likeOfId);
@@ -32,6 +33,7 @@ Router.post("/toggle", async (req, res) => {
         likeOf,
     });
     if (like) {
+        likeId = like._id;
         await likeable.likes.pull(like._id);
         like.remove();
         likeable.save();
@@ -43,11 +45,15 @@ Router.post("/toggle", async (req, res) => {
             user: req.user._id,
         });
         await likeable.likes.push(like._id);
+        like = await like.populate({ path: "user", select: "firstName lastName userName" }).execPopulate();
+        likeId = like._id;
         likeable.save();
     }
     return res.json({
         message: "LIKE TOGGLED SUCCESSFULLY",
         deleted,
+        likeOf,
+        like: { user: like.user, _id: like._id },
     });
 });
 

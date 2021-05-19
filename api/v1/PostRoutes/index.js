@@ -4,7 +4,7 @@ const router = express.Router();
 const Comment = require("../../../models/Comment");
 const Like = require("../../../models/Like");
 
-//Get Comments of a perticular post
+//Get all the posts;
 router.get("/get", async (req, res) => {
     let posts = await Post.find({})
         .populate({
@@ -20,7 +20,8 @@ router.get("/get", async (req, res) => {
             },
         })
         .populate({ path: "user", select: "firstName lastName " })
-        .populate({ path: "likes", select: "user", populate: { path: "user", select: "firstName lastName" } });
+        .populate({ path: "likes", select: "user", populate: { path: "user", select: "firstName lastName" } })
+        .sort("-createdAt");
     // .populate({ path: "comments", populate: { path: "user" } })
     // .populate({ path: "comments", populate: { path: "likes" } })
     // .populate({ path: "likes", populate: { path: "user" } });
@@ -29,7 +30,7 @@ router.get("/get", async (req, res) => {
             error: "ERROR WHILE FETCHING POSTS.",
         });
     res.status(200).json({
-        ...posts,
+        posts,
     });
 });
 

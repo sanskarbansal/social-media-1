@@ -32,7 +32,7 @@ const Post = new mongoose.Schema(
 
 Post.post("remove", async (doc, next) => {
     let comments = await Comment.find({ post: doc._id });
-    console.log("\x1b[31mDeleted ", comments.length, " Comments");
+
     for (let comment of comments) {
         await comment.remove();
     }

@@ -4,21 +4,21 @@ const router = express.Router();
 const Comment = require("../../../models/Comment");
 const Like = require("../../../models/Like");
 
-router.post("/get", async (req, res) => {
-    const { postId } = req.body;
-    if (!postId || postId.length != 24)
-        return res.json({
-            error: "ERROR WHILE FETCHING COMMENTS, MAYBE INVALID POST ID",
-        });
-    let comments = await Comment.find({ post: postId });
-    if (!comments)
-        return res.json({
-            error: "NO COMMENTS FOUND RELATED TO THIS POST ID",
-        });
-    res.json({
-        comments,
-    });
-});
+// router.post("/get", async (req, res) => {
+//     const { postId } = req.body;
+//     if (!postId || postId.length != 24)
+//         return res.json({
+//             error: "ERROR WHILE FETCHING COMMENTS, MAYBE INVALID POST ID",
+//         });
+//     let comments = await Comment.find({ post: postId });
+//     if (!comments)
+//         return res.json({
+//             error: "NO COMMENTS FOUND RELATED TO THIS POST ID",
+//         });
+//     res.json({
+//         comments,
+//     });
+// });
 router.post("/create", async (req, res) => {
     const { postId, body } = req.body;
     if (!postId || !body || postId.length != 24)
@@ -37,8 +37,24 @@ router.post("/create", async (req, res) => {
         return res.json({
             error: "ERROR WHILE CREATING COMMENT",
         });
+
+    comment = await comment
+        .populate({
+            path: "user",
+            select: "firstName lastName ",
+        })
+        .populate({
+            path: "likes",
+            select: "user",
+            populate: {
+                path: "user",
+                select: "username firstName lastName",
+            },
+        })
+        .execPopulate();
     res.json({
         message: "COMMENT CREATED SUCCESSFULLY",
+        comment,
     });
 });
 
