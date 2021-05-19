@@ -1,47 +1,79 @@
-import { useState } from "react";
-import { TextField, Grid, Button, Dialog, DialogContent, DialogTitle, DialogActions, DialogContentText, Container } from "@material-ui/core";
+import { useState, useEffect, useRef } from "react";
+import { TextField, Grid, Button, Dialog, DialogContent, DialogTitle, DialogActions, DialogContentText, Typography } from "@material-ui/core";
 import React from "react";
 import { createPost } from "../../actions/posts";
 import { connect } from "react-redux";
+import Markdown from "../Makrdown";
+
+let pos = null;
 
 function CreatePost(props) {
     const [isOpen, setisOpen] = useState(false);
-    const [isConfirmDialogOpen, setIsConfirmDialog] = useState(false);
     const toggleClose = (val) => () => setisOpen(val);
     const [content, setContent] = useState("");
     const handleOnChange = (event) => {
         setContent(event.target.value);
     };
+    let inputRef = useRef(null);
+    useEffect(() => {
+        if (pos == null) return;
+        inputRef.current.selectionStart = pos + 1;
+        inputRef.current.selectionEnd = pos + 1;
+    }, [content]);
+
     const handleSubmit = () => {
         props.dispatch(createPost({ body: content }));
         setisOpen(false);
+        setContent("");
     };
-
+    const handleTab = (event) => {
+        if (inputRef.current == null) inputRef.current = event.target;
+        if (event.keyCode === 9) {
+            event.preventDefault();
+            pos = event.target.selectionStart;
+            setContent(content.substr(0, pos) + "\t" + content.substr(pos));
+        } else {
+            pos = null;
+        }
+    };
     return (
         <>
             <Grid container alignItems="stretch" justify="center" spacing={2}>
-                <Grid item md={10} style={{ width: "100%" }}>
+                <Grid item md={9} style={{ width: "100%" }}>
                     <TextField
-                        style={{ height: 10 }}
                         InputLabelProps={{
                             shrink: true,
                         }}
                         label="Create Post"
                         variant="outlined"
                         fullWidth
-                        style={{ borderRadius: 0 }}
                         onClick={toggleClose(true)}
                     />
                 </Grid>
             </Grid>
 
-            <Dialog open={isOpen} fullWidth onBackdropClick={() => setIsConfirmDialog(true)}>
+            <Dialog open={isOpen} fullScreen onClose={() => setisOpen(false)}>
                 <DialogTitle color="black">Create Post</DialogTitle>
-                <DialogContent>
+                <DialogContent dividers>
                     <DialogContentText color="primary" variant="h6">
                         Enter content of the post.
                     </DialogContentText>
-                    <TextField id="post" onChange={handleOnChange} label="Post Content" variant="outlined" fullWidth rows="10" multiline />
+                    <TextField
+                        onKeyDown={handleTab}
+                        id="post"
+                        value={content}
+                        onChange={handleOnChange}
+                        label="Post Content"
+                        variant="outlined"
+                        fullWidth
+                        rows="10"
+                        multiline
+                    />
+
+                    <Typography variant="h5" color="textPrimary" align="center" style={{ textDecoration: "underline" }}>
+                        OUTPUT
+                    </Typography>
+                    <Markdown content={content} />
                 </DialogContent>
                 <DialogActions>
                     <Grid container justify="center">
@@ -56,32 +88,7 @@ function CreatePost(props) {
                     </Grid>
                 </DialogActions>
             </Dialog>
-            <Dialog open={isConfirmDialogOpen} fullWidth>
-                <DialogTitle>CONFIRMATION</DialogTitle>
 
-                <DialogContent dividers>
-                    <DialogContentText variant="h5" color="black" style={{ textAlign: "center" }}>
-                        Do you really want to discard this post ?
-                    </DialogContentText>
-                </DialogContent>
-
-                <DialogActions>
-                    <Button variant="outlined" fullWidth color="primary" onClick={() => setIsConfirmDialog(false)}>
-                        No
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        fullWidth
-                        color="secondary"
-                        onClick={() => {
-                            setIsConfirmDialog(false);
-                            setisOpen(false);
-                        }}
-                    >
-                        Yes
-                    </Button>
-                </DialogActions>
-            </Dialog>
             {/* <Grid item md={4}>
                 <Button variant="contained" color="secondary" style={{ height: "100%" }}>
                 Create Post

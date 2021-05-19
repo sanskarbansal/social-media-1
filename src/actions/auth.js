@@ -1,6 +1,7 @@
-import { LOGIN_FAILED, LOGIN_START, LOGIN_SUCCESS, RESET_SIGNUP, SIGNUP_FAILED, SIGNUP_START, SIGNUP_SUCCESS } from "./actionTypes";
+import { LOGIN_FAILED, LOGIN_START, LOGIN_SUCCESS, RESET_SIGNUP, SIGNUP_FAILED, SIGNUP_START, SIGNUP_SUCCESS, LOGOUT_USER } from "./actionTypes";
 import { APIurls } from "../helpers/urls";
 import jwtdecode from "jwt-decode";
+import { fetchPosts } from "./posts";
 export const startLogin = () => ({
     type: LOGIN_START,
 });
@@ -20,8 +21,8 @@ export const login = (username, password) => (dispatch) => {
         .then((data) => {
             if (data.error) return dispatch(loginFailed(data.error));
             const user = jwtdecode(data.token);
-            dispatch(loginSuccess(user));
             window.localStorage.setItem("token", data.token);
+            dispatch(setUser(user));
         })
         .catch((error) => {
             dispatch(loginFailed("SERVER DOWN"));
@@ -33,10 +34,13 @@ export const loginFailed = (error) => ({
     error,
 });
 
-export const loginSuccess = (user) => ({
-    type: LOGIN_SUCCESS,
-    user,
-});
+export const setUser = (user) => (dispatch) => {
+    dispatch(fetchPosts());
+    dispatch({
+        type: LOGIN_SUCCESS,
+        user,
+    });
+};
 
 export const signUpStart = () => ({
     type: SIGNUP_START,
@@ -62,7 +66,6 @@ export const signup = (userDetails) => (dispatch) => {
     })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data);
             if (data.error) return dispatch(signUpFailed(data.error));
             dispatch(signUpSuccess(data.message));
         })
@@ -74,4 +77,8 @@ export const signup = (userDetails) => (dispatch) => {
 export const resetSignup = () => ({
     type: RESET_SIGNUP,
     message: "SIGNED UP SUCCESSFULLY",
+});
+
+export const logOutUser = () => ({
+    type: LOGOUT_USER,
 });

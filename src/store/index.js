@@ -5,6 +5,8 @@ import logger from "redux-logger";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-export default () => {
+const store = () => {
     return createStore(rootReducer, composeEnhancers(applyMiddleware(thunk, logger)));
 };
+
+export default store;

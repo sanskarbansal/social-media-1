@@ -1,5 +1,5 @@
 import { APIurls } from "../helpers/urls";
-import { ADD_POST, SET_LOADING, TOGGLE_LIKE, UPDATE_POSTS } from "./actionTypes";
+import { ADD_POST, DELETE_POST, SET_LOADING, TOGGLE_LIKE, UPDATE_POSTS } from "./actionTypes";
 // export const fetchPosts = () => {
 //     return (dispatch) => {
 //         const url = "https://jsonplaceholder.typicode.com/posts";
@@ -41,13 +41,11 @@ export const createPost = (post) => (dispatch) => {
         .then((res) => res.json())
         .then((data) => {
             dispatch(addPost(data));
-            console.log(data);
         });
 };
-export const fetchPosts = (posts) => (dispatch) => {
-    // dispatch();
-    // console.log("called");
+export const fetchPosts = () => (dispatch) => {
     fetch(APIurls.getPosts, {
+        method: "GET",
         headers: {
             Authorization: `Bearer ${window.localStorage.getItem("token")}`,
         },
@@ -78,5 +76,25 @@ export const toggleLike = (likeOfId) => (dispatch) => {
         .then((res) => res.json())
         .then((data) => {
             dispatch(updateLike({ ...data, likeOfId }));
+        });
+};
+
+export const updateDeletedPost = (postId) => ({
+    type: DELETE_POST,
+    postId,
+});
+
+export const deletePost = (postId) => (dispatch) => {
+    fetch(APIurls.deletePost, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ postId }),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            dispatch(updateDeletedPost(postId));
         });
 };

@@ -70,6 +70,7 @@ function Navbar(props) {
     if (props.auth.isLoggedIn) {
         const { firstName } = props.auth.user;
         navLinks.push({ title: firstName, path: "/setting" });
+        navLinks.push({ title: "Logout", path: "/logout" });
     }
     return (
         <div style={{ marginBottom: 80 }}>

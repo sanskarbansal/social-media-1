@@ -4,5 +4,6 @@ export const APIurls = {
     signup: `${url}/user/signup`,
     createPost: `${url}/post/create`,
     getPosts: `${url}/post/get`,
+    deletePost: `${url}/post/delete`,
     toggleLike: `${url}/like/toggle`,
 };

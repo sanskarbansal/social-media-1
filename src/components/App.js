@@ -6,9 +6,10 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core";
 import jwtdecode from "jwt-decode";
 import Dashboard from "./Dashboard/Dashboard";
-import { loginSuccess } from "../actions/auth";
+import { setUser } from "../actions/auth";
 import Home from "./Home";
 import ProtectedRoute from "./ProtectedRoute";
+import Logout from "./Logout";
 
 import Settings from "./Dashboard/Setting";
 
@@ -33,7 +34,7 @@ class App extends Component {
         const token = window.localStorage.getItem("token");
         if (token) {
             const user = jwtdecode(token);
-            this.props.dispatch(loginSuccess(user));
+            this.props.dispatch(setUser(user));
         }
     }
 
@@ -44,6 +45,7 @@ class App extends Component {
                 <Switch>
                     <ProtectedRoute path="/dashboard" component={Dashboard} />
                     <ProtectedRoute path="/setting" component={Settings} />
+                    <ProtectedRoute path="/logout" render={() => <Logout dispatch={this.props.dispatch} />} />
                     <Route path="/" component={Home} />
                 </Switch>
             </Router>

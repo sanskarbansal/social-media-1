@@ -3,9 +3,16 @@ import { connect } from "react-redux";
 import { Redirect, Route } from "react-router";
 
 function ProtectedRoute(props) {
-    const Component = props.component;
-    if (props.auth.isLoggedIn && props.auth.user) return <Route path={props.path} render={(propsH) => <Component {...propsH} />} />;
-    return <Route path={props.path} render={() => <Redirect to={{ pathname: "/", from: { pathname: props.location.pathname } }} />} />;
+    const Component = props.component || props.render;
+    const to = {
+        pathname: "/",
+        from: {
+            pathname: props.location.pathname,
+        },
+    };
+
+    if (props.auth.isLoggedIn && props.auth.user) return <Route path={props.path} render={() => <Component {...props} />} />;
+    return <Route path={props.path} render={() => <Redirect to={to} />} />;
 }
 const mapStateToProps = (state) => ({
     auth: state.auth,

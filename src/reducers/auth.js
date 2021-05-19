@@ -1,12 +1,12 @@
-import { LOGIN_START, LOGIN_FAILED, LOGIN_SUCCESS, SIGNUP_START, SIGNUP_FAILED, SIGNUP_SUCCESS, RESET_SIGNUP } from "../actions/actionTypes";
+import { LOGIN_START, LOGIN_FAILED, LOGIN_SUCCESS, SIGNUP_START, SIGNUP_FAILED, SIGNUP_SUCCESS, RESET_SIGNUP, LOGOUT_USER } from "../actions/actionTypes";
 const initAuthState = {
     user: {},
     error: null,
-    isLogegdIn: false,
+    isLoggedIn: false,
     inProgress: false,
     signUpSuccess: false,
 };
-export default function (state = initAuthState, action) {
+export default function authReducer(state = initAuthState, action) {
     switch (action.type) {
         case LOGIN_START:
         case SIGNUP_START:
@@ -32,6 +32,15 @@ export default function (state = initAuthState, action) {
                 error: null,
                 isLoggedIn: false,
                 signUpSuccess: true,
+            };
+        case LOGOUT_USER:
+            return {
+                ...state,
+                message: "",
+                inProgress: false,
+                error: null,
+                user: {},
+                isLoggedIn: false,
             };
         case RESET_SIGNUP:
             return {
