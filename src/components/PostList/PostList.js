@@ -8,8 +8,8 @@ class PostList extends Component {
         return (
             <Grid container direction="column" alignItems="center" spacing={2}>
                 {posts.map((post) => (
-                    <Grid item md={8} xs={10} style={{ width: "100%" }}>
-                        <Post post={post} />
+                    <Grid item md={8} xs={10} style={{ width: "100%" }} key={post._id}>
+                        <Post post={post} dispatch={this.props.dispatch} />
                     </Grid>
                 ))}
             </Grid>

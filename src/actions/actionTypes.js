@@ -15,3 +15,7 @@ export const RESET_SIGNUP = "RESET_SIGNUP";
 
 //ACTIONS FOR ADDING POST
 export const ADD_POST = "ADD_POST";
+export const ADD_POSTS = "ADD_POSTS";
+
+//ACTIONS FOR TOGGLING LIKE
+export const TOGGLE_LIKE = "TOGGLE_LIKE";
