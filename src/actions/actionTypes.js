@@ -20,5 +20,9 @@ export const ADD_POST = "ADD_POST";
 export const ADD_POSTS = "ADD_POSTS";
 export const DELETE_POST = "DELETE_POST";
 
+//ACTIONS FOR COMMENTS
+
+export const ADD_COMMENT = "ADD_COMMENT";
+
 //ACTIONS FOR TOGGLING LIKE
 export const TOGGLE_LIKE = "TOGGLE_LIKE";

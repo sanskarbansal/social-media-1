@@ -1,5 +1,5 @@
 import { APIurls } from "../helpers/urls";
-import { ADD_POST, DELETE_POST, SET_LOADING, TOGGLE_LIKE, UPDATE_POSTS } from "./actionTypes";
+import { ADD_COMMENT, ADD_POST, DELETE_POST, SET_LOADING, TOGGLE_LIKE, UPDATE_POSTS } from "./actionTypes";
 // export const fetchPosts = () => {
 //     return (dispatch) => {
 //         const url = "https://jsonplaceholder.typicode.com/posts";
@@ -62,22 +62,25 @@ export const updateLike = (paylod) => ({
     paylod,
 });
 
-export const toggleLike = (likeOfId) => (dispatch) => {
-    fetch(APIurls.toggleLike, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-            likeOfId,
-        }),
-    })
-        .then((res) => res.json())
-        .then((data) => {
-            dispatch(updateLike({ ...data, likeOfId }));
-        });
-};
+export function toggleLike(likeOfId) {
+    const pId = arguments[1];
+    return (dispatch) => {
+        fetch(APIurls.toggleLike, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+                likeOfId,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                dispatch(updateLike({ ...data, likeOfId, pId }));
+            });
+    };
+}
 
 export const updateDeletedPost = (postId) => ({
     type: DELETE_POST,
@@ -96,5 +99,25 @@ export const deletePost = (postId) => (dispatch) => {
         .then((res) => res.json())
         .then((data) => {
             dispatch(updateDeletedPost(postId));
+        });
+};
+
+export const updateComment = (comment) => ({
+    type: ADD_COMMENT,
+    comment,
+});
+
+export const postComment = (postId, comment) => (dispatch) => {
+    fetch(APIurls.createComment, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ postId, body: comment }),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            dispatch(updateComment(data.comment));
         });
 };

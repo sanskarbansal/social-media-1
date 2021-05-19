@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 // import { docco } from "react-syntax-highlighter/dist/cjs/styles/prism/a";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -17,5 +18,13 @@ const components = {
 };
 
 export default function Makrdown(props) {
-    return <ReactMarkdown linkTarget="_blank" components={components} remarkPlugins={[gfm]} children={props.content || props.children} />;
+    return (
+        <ReactMarkdown
+            rehypePlugins={[rehypeRaw]}
+            linkTarget="_blank"
+            components={components}
+            remarkPlugins={[gfm]}
+            children={props.content || props.children}
+        />
+    );
 }

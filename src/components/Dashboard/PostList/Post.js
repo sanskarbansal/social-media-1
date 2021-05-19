@@ -1,10 +1,10 @@
-import { Card, CardContent, CardHeader, Typography, CardActions, Button, makeStyles, Divider, IconButton } from "@material-ui/core";
+import { Grid, Card, CardContent, CardHeader, Typography, CardActions, Button, makeStyles, Divider, IconButton, ButtonGroup } from "@material-ui/core";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import React from "react";
+import React, { useRef } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { deletePost, toggleLike } from "../../../actions/posts";
 import Makrdown from "../../Makrdown";
+import CommentsList from "./Comments/CommentsList";
 
 const useStyles = makeStyles({
     pointer: {
@@ -13,6 +13,7 @@ const useStyles = makeStyles({
 });
 
 export default function Post(props) {
+    const commentRef = useRef(null);
     const {
         body,
         createdAt,
@@ -30,7 +31,6 @@ export default function Post(props) {
         }
     });
     const ourPost = props.post.user._id === props.userId;
-
     return (
         <Card variant="elevation">
             <CardHeader
@@ -51,14 +51,20 @@ export default function Post(props) {
             </CardContent>
             <Divider />
             <CardActions disableSpacing>
-                <Button aria-label="add to favorites" onClick={handleLike}>
-                    <FavoriteIcon className={classes.pointer} color={`${_isLiked ? "secondary" : "primary"}`} />
-                    <Typography>{likes.length}</Typography>
-                </Button>
-                <Button aria-label="share">
-                    <ShareIcon />
-                </Button>
+                <Grid container justify="center">
+                    <ButtonGroup>
+                        <Button variant={`${_isLiked ? "contained" : "outlined"}`} color="primary" aria-label="add to favorites" onClick={handleLike}>
+                            <FavoriteIcon className={classes.pointer} color={`${_isLiked ? "secondary" : "primary"}`} />
+                            <Typography>Like {likes.length}</Typography>
+                        </Button>
+                        <Button aria-label="share" variant="outlined" onClick={() => commentRef.current.focus()}>
+                            Comment
+                        </Button>
+                    </ButtonGroup>
+                </Grid>
             </CardActions>
+            <Divider />
+            <CommentsList comments={props.post.comments} pId={props.post._id} commentRef={commentRef} dispatch={props.dispatch} />
         </Card>
     );
 }

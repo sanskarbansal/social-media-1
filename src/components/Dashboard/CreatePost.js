@@ -5,46 +5,48 @@ import { createPost } from "../../actions/posts";
 import { connect } from "react-redux";
 import Markdown from "../Makrdown";
 
-let pos = null;
-
 function CreatePost(props) {
     const [isOpen, setisOpen] = useState(false);
     const toggleClose = (val) => () => setisOpen(val);
     const [content, setContent] = useState("");
+    const inputRef = useRef(null);
+    const [pos, setPos] = useState(null);
+
     const handleOnChange = (event) => {
         setContent(event.target.value);
     };
-    let inputRef = useRef(null);
-    useEffect(() => {
-        if (pos == null) return;
-        inputRef.current.selectionStart = pos + 1;
-        inputRef.current.selectionEnd = pos + 1;
-    }, [content]);
 
     const handleSubmit = () => {
         props.dispatch(createPost({ body: content }));
         setisOpen(false);
         setContent("");
     };
+    useEffect(() => {
+        if (pos !== null) {
+            inputRef.current.selectionStart = pos + 1;
+            inputRef.current.selectionEnd = pos + 1;
+        }
+        setPos(null);
+    }, [pos]);
+
     const handleTab = (event) => {
-        if (inputRef.current == null) inputRef.current = event.target;
         if (event.keyCode === 9) {
             event.preventDefault();
-            pos = event.target.selectionStart;
-            setContent(content.substr(0, pos) + "\t" + content.substr(pos));
-        } else {
-            pos = null;
+            let p = inputRef.current.selectionStart;
+            setContent(content.substr(0, p) + "\t" + content.substr(p));
+            setPos(p);
         }
     };
     return (
         <>
             <Grid container alignItems="stretch" justify="center" spacing={2}>
-                <Grid item md={9} style={{ width: "100%" }}>
+                <Grid item md={6} style={{ width: "100%" }}>
                     <TextField
                         InputLabelProps={{
                             shrink: true,
                         }}
                         label="Create Post"
+                        size="small"
                         variant="outlined"
                         fullWidth
                         onClick={toggleClose(true)}
@@ -59,9 +61,11 @@ function CreatePost(props) {
                         Enter content of the post.
                     </DialogContentText>
                     <TextField
-                        onKeyDown={handleTab}
-                        id="post"
                         value={content}
+                        onKeyDown={handleTab}
+                        // InputProps={{ ref: inputRef }}
+                        inputRef={inputRef}
+                        id="post"
                         onChange={handleOnChange}
                         label="Post Content"
                         variant="outlined"
