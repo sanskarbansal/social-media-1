@@ -6,6 +6,8 @@ const Like = require("../../../models/Like");
 
 //Get all the posts;
 router.get("/get", async (req, res) => {
+    let { page = 1, limit = 10 } = req.query;
+    (page = parseInt(page)), (limit = parseInt(limit));
     let posts = await Post.find({})
         .populate({
             path: "comments",
@@ -21,7 +23,9 @@ router.get("/get", async (req, res) => {
         })
         .populate({ path: "user", select: "firstName lastName " })
         .populate({ path: "likes", select: "user", populate: { path: "user", select: "firstName lastName" } })
-        .sort("-createdAt");
+        .sort("-createdAt")
+        .limit(limit)
+        .skip((page - 1) * limit);
     // .populate({ path: "comments", populate: { path: "user" } })
     // .populate({ path: "comments", populate: { path: "likes" } })
     // .populate({ path: "likes", populate: { path: "user" } });

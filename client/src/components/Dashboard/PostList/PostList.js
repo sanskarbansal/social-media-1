@@ -1,8 +1,20 @@
 import React, { Component } from "react";
-import { Grid } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { connect } from "react-redux";
 import Post from "./Post";
+import { fetchPosts } from "../../../actions/posts";
+// import {fret }
 class PostList extends Component {
+    state = {
+        currentPage: 1,
+    };
+    handleShowMore = () => {
+        this.props.dispatch(fetchPosts(this.state.currentPage + 1));
+        this.setState((prevState) => ({
+            ...this.state,
+            currentPage: prevState.currentPage + 1,
+        }));
+    };
     render() {
         const { posts } = this.props.posts;
 
@@ -13,6 +25,9 @@ class PostList extends Component {
                         <Post post={post} dispatch={this.props.dispatch} userId={this.props.user._id} />
                     </Grid>
                 ))}
+                <Button variant="outlined" onClick={this.handleShowMore}>
+                    Show More
+                </Button>
             </Grid>
         );
     }

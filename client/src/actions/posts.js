@@ -43,17 +43,19 @@ export const createPost = (post) => (dispatch) => {
             dispatch(addPost(data));
         });
 };
-export const fetchPosts = () => (dispatch) => {
-    fetch(APIurls.getPosts, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        },
-    })
-        .then((res) => res.json())
-        .then((data) => dispatch(updatePosts(data.posts)))
-        .catch((err) => console.log(err));
-};
+export const fetchPosts =
+    (page, limit = 1) =>
+    (dispatch) => {
+        fetch(APIurls.getPosts(limit, page), {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => dispatch(updatePosts(data.posts)))
+            .catch((err) => console.log(err));
+    };
 
 // export const
 
