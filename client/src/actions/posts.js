@@ -44,7 +44,7 @@ export const createPost = (post) => (dispatch) => {
         });
 };
 export const fetchPosts =
-    (page, limit = 1) =>
+    (page, limit = 5) =>
     (dispatch) => {
         fetch(APIurls.getPosts(limit, page), {
             method: "GET",

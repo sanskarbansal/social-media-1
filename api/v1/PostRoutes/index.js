@@ -3,6 +3,8 @@ const Post = require("../../../models/Post");
 const router = express.Router();
 const Comment = require("../../../models/Comment");
 const Like = require("../../../models/Like");
+const User = require("../../../models/User");
+const { findById } = require("../../../models/User");
 
 //Get all the posts;
 router.get("/get", async (req, res) => {
@@ -47,6 +49,9 @@ router.post("/create", async (req, res) => {
         return res.status(404).json({
             error: "ERROR OCCURRED WHILE CREATING A POST!",
         });
+    let user = await User.findById(req.user._id);
+    user.posts.push(post._doc);
+    user.save();
     res.status(200).json({
         ...post._doc,
     });
@@ -64,6 +69,9 @@ router.post("/delete", async (req, res) => {
         return res.status(403).json({
             error: "YOU ARE NOT AUTHORISED TO PERFORM THIS ACTION.",
         });
+    const user = await User.findById(req.user._id);
+    user.posts.pull(postId);
+    await user.save();
     await post.remove(); //Likes and Comments associated with this post are deleted in pre("remove") hook, in mongoose middleware
     return res.json({
         message: "POST DELETED SUCCESFULLY",

@@ -3,7 +3,7 @@ import Navbar from "./Navbar/Navbar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import React, { Component } from "react";
-import { withStyles } from "@material-ui/core";
+import { withStyles, ThemeProvider, createMuiTheme } from "@material-ui/core";
 import jwtdecode from "jwt-decode";
 import Dashboard from "./Dashboard/Dashboard";
 import { setUser } from "../actions/auth";
@@ -29,6 +29,38 @@ const style = withStyles((theme) => {
     };
 });
 
+const theme = createMuiTheme({
+    palette: {
+        // primary: {
+        //     main: "#000001",
+        // },
+        // secondary: {
+        //     main: "#000000",
+        // },
+        // text: {
+        //     primary: "#ffffff",
+        // },
+
+        // background: {
+        //     paper: "#000000",
+        //     // default: "#000000",
+        // },
+        type: "dark",
+        primary: {
+            main: "#000000",
+            light: "#000000",
+            dark: "#000000",
+        },
+        background: {
+            paper: "#163344",
+        },
+        text: {
+            primary: "#ffffff",
+            secondary: "#ffffff",
+        },
+    },
+});
+
 class App extends Component {
     componentDidMount() {
         const token = window.localStorage.getItem("token");
@@ -40,6 +72,7 @@ class App extends Component {
 
     render() {
         return (
+            // <ThemeProvider theme={theme}>
             <Router>
                 <Navbar />
                 <Switch>
@@ -49,6 +82,7 @@ class App extends Component {
                     <Route path="/" component={Home} />
                 </Switch>
             </Router>
+            // </ThemeProvider>
         );
     }
 }

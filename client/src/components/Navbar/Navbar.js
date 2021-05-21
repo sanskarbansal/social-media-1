@@ -1,10 +1,11 @@
 import React from "react";
-import { AppBar, Toolbar, List, ListItem, ListItemText, makeStyles, Container, Hidden, Button, InputBase, fade } from "@material-ui/core";
+import { AppBar, Toolbar, List, ListItem, ListItemText, makeStyles, Container, Hidden, Button, InputBase, fade, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Home from "@material-ui/icons/Home";
 import { SideDrawer } from "./SideDrawer";
 import SearchIcon from "@material-ui/icons/Search";
 import { connect } from "react-redux";
+import { nominalTypeHack } from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
     search: {
@@ -76,22 +77,8 @@ function Navbar(props) {
         <div style={{ marginBottom: 80 }}>
             <AppBar position="fixed">
                 <Toolbar>
-                    <Link to="/dashboard">
-                        <Button
-                            variant="outlined"
-                            aria-label="Home"
-                            style={{
-                                borderColor: "lightgrey",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-evenly",
-                                color: "white",
-                                cursor: "pointer",
-                                minWidth: "150px",
-                                fontSize: 15,
-                                padding: 0,
-                            }}
-                        >
+                    <Link to="/dashboard" style={{ textDecoration: "none", width: "450px" }}>
+                        <Button>
                             <p>Social Media</p>
                             <Home />
                         </Button>

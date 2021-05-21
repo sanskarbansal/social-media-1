@@ -30,6 +30,18 @@ const User = new Schema(
             type: String,
             default: "India",
         },
+        friends: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "user",
+            },
+        ],
+        posts: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "post",
+            },
+        ],
     },
     {
         timestamps: true,

@@ -40,24 +40,18 @@ function CreatePost(props) {
     return (
         <>
             <Grid container alignItems="stretch" justify="center" spacing={2}>
-                <Grid item md={6} style={{ width: "100%" }}>
-                    <TextField
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        label="Create Post"
-                        size="small"
-                        variant="outlined"
-                        fullWidth
-                        onClick={toggleClose(true)}
-                    />
-                </Grid>
+                {/* <Grid item md={6} style={{ width: "100%" }}> */}
+                {/* <TextField color="primary" label="Create Post" size="small" variant="outlined" fullWidth onClick={toggleClose(true)} /> */}
+                <Button variant="outlined" onClick={toggleClose(true)} color="primary">
+                    CREATE NEW POST
+                </Button>
+                {/* </Grid> */}
             </Grid>
 
             <Dialog open={isOpen} fullScreen onClose={() => setisOpen(false)}>
                 <DialogTitle color="black">Create Post</DialogTitle>
                 <DialogContent dividers>
-                    <DialogContentText color="primary" variant="h6">
+                    <DialogContentText color="textPrimary" variant="h6">
                         Enter content of the post.
                     </DialogContentText>
                     <TextField
@@ -73,10 +67,11 @@ function CreatePost(props) {
                         rows="10"
                         multiline
                     />
-
-                    <Typography variant="h5" color="textPrimary" align="center" style={{ textDecoration: "underline" }}>
-                        OUTPUT
-                    </Typography>
+                    {content && (
+                        <Typography variant="h5" color="textPrimary" align="center" style={{ textDecoration: "underline" }}>
+                            OUTPUT
+                        </Typography>
+                    )}
                     <Markdown content={content} />
                 </DialogContent>
                 <DialogActions>

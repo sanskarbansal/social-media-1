@@ -53,7 +53,7 @@ export default function Post(props) {
             <CardActions disableSpacing>
                 <Grid container justify="center">
                     <ButtonGroup>
-                        <Button variant={`${_isLiked ? "contained" : "outlined"}`} color="primary" aria-label="add to favorites" onClick={handleLike}>
+                        <Button variant={`${_isLiked ? "contained" : "outlined"}`} aria-label="add to favorites" onClick={handleLike}>
                             <FavoriteIcon className={classes.pointer} color={`${_isLiked ? "secondary" : "primary"}`} />
                             <Typography>Like {likes.length}</Typography>
                         </Button>
