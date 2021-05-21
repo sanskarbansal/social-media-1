@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AppBar, Toolbar, List, ListItem, ListItemText, makeStyles, Container, Hidden, Button, InputBase, fade, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Home from "@material-ui/icons/Home";
@@ -6,6 +6,7 @@ import { SideDrawer } from "./SideDrawer";
 import SearchIcon from "@material-ui/icons/Search";
 import { connect } from "react-redux";
 import { nominalTypeHack } from "prop-types";
+import { searchUsers } from "../../actions/search";
 
 const useStyles = makeStyles((theme) => ({
     search: {
@@ -66,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
 // ];
 
 function Navbar(props) {
+    const [search, setSearch] = useState("");
     const classes = useStyles();
     const navLinks = [];
     if (props.auth.isLoggedIn) {
@@ -73,6 +75,12 @@ function Navbar(props) {
         navLinks.push({ title: firstName, path: "/setting" });
         navLinks.push({ title: "Logout", path: "/logout" });
     }
+    const handleSubmit = (event) => {
+        if (event.code === "Enter") {
+            props.dispatch(searchUsers(search, 1, 1));
+            setSearch("");
+        }
+    };
     return (
         <div style={{ marginBottom: 80 }}>
             <AppBar position="fixed">
@@ -90,6 +98,9 @@ function Navbar(props) {
                                     <SearchIcon />
                                 </div>
                                 <InputBase
+                                    onKeyDown={handleSubmit}
+                                    onChange={(event) => setSearch(event.target.value)}
+                                    value={search}
                                     placeholder="Search…"
                                     classes={{
                                         root: classes.inputRoot,
