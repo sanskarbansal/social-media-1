@@ -37,4 +37,20 @@ router.post("/login", async (req, res) => {
     });
 });
 
+router.get("/", async (req, res) => {
+    // const users = await User.find({ $or: [{ firstName: /^req.query.s/ }, { username: `/^${req.query.s}/` }], select: "firstName lastName username" });
+    let { s, limit = 5, page } = req.query;
+    limit = parseInt(limit);
+    page = parseInt(page);
+    const users = await User.find({
+        $or: [{ firstName: { $regex: s, $options: "m" } }, { username: { $regex: s, $options: "m" } }],
+    })
+        .select("firstName lastName username")
+        .limit(limit || 5)
+        .skip((page - 1) * (limit || 5));
+    res.json({
+        users,
+    });
+});
+
 module.exports = router;

@@ -26,3 +26,7 @@ Content-Type: application/json
     "username": "sanskarbansal", 
     "password": "blahblahblah"
 }
+
+###
+GET http://localhost:1337/api/v1/user/?s=Ra&page=3&limit=1 HTTP/1.1
+Content-Type: application/json
