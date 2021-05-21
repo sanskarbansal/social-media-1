@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { AppBar, Toolbar, List, ListItem, ListItemText, makeStyles, Container, Hidden, Button, InputBase, fade, Typography } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { AppBar, Toolbar, List, ListItem, ListItemText, makeStyles, Container, Hidden, Button, InputBase, fade } from "@material-ui/core";
+import { Link, withRouter } from "react-router-dom";
 import Home from "@material-ui/icons/Home";
 import { SideDrawer } from "./SideDrawer";
 import SearchIcon from "@material-ui/icons/Search";
 import { connect } from "react-redux";
-import { nominalTypeHack } from "prop-types";
 import { searchUsers } from "../../actions/search";
 
 const useStyles = makeStyles((theme) => ({
@@ -58,14 +57,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-// const navLinks = [
-//     { title: `about us`, path: `/about-us` },
-//     { title: `product`, path: `/product` },
-//     { title: `blog`, path: `/blog` },
-//     { title: `contact`, path: `/contact` },
-//     { title: `faq`, path: `/faq` },
-// ];
-
 function Navbar(props) {
     const [search, setSearch] = useState("");
     const classes = useStyles();
@@ -75,10 +66,11 @@ function Navbar(props) {
         navLinks.push({ title: firstName, path: "/setting" });
         navLinks.push({ title: "Logout", path: "/logout" });
     }
-    const handleSubmit = (event) => {
-        if (event.code === "Enter") {
-            props.dispatch(searchUsers(search, 1, 1));
-            setSearch("");
+    const handleSearch = (event) => {
+        setSearch(event.target.value);
+        props.dispatch(searchUsers(event.target.value, 1, 5));
+        if (props.location.pathname !== "/dashboard") {
+            props.history.push("/dashboard");
         }
     };
     return (
@@ -92,14 +84,17 @@ function Navbar(props) {
                         </Button>
                     </Link>
                     <Hidden smDown>
+                        {/* {style={{ height: "60px" }} */}
                         <Container maxWidth="xs">
+                            {/* <List style={{ height: "100%", padding: 0, background: `${results.length > 0 ? "black" : ""}` }}>
+                                <ListItem> */}
                             <div className={classes.search}>
                                 <div className={classes.searchIcon}>
                                     <SearchIcon />
                                 </div>
+
                                 <InputBase
-                                    onKeyDown={handleSubmit}
-                                    onChange={(event) => setSearch(event.target.value)}
+                                    onChange={handleSearch}
                                     value={search}
                                     placeholder="Search…"
                                     classes={{
@@ -109,6 +104,19 @@ function Navbar(props) {
                                     inputProps={{ "aria-label": "search" }}
                                 />
                             </div>
+                            {/* </ListItem> */}
+                            {/* <Collapse in={results.length > 0} style={{ background: "black" }}>
+                                    {results.map((user) => (
+                                        <Link>
+                                            <ListItem key={user._id}>
+                                                <ListItemText>
+                                                    {user.firstName} {user.lastName}
+                                                </ListItemText>
+                                            </ListItem>
+                                        </Link>
+                                    ))}
+                                </Collapse>
+                            </List> */}
                         </Container>
                     </Hidden>
                     <Container className={classes.navDisplayFlex} maxWidth="xl">
@@ -137,6 +145,7 @@ function Navbar(props) {
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
+    search: state.search,
 });
 
-export default connect(mapStateToProps)(Navbar);
+export default connect(mapStateToProps)(withRouter(Navbar));

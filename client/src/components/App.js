@@ -10,7 +10,7 @@ import { setUser } from "../actions/auth";
 import Home from "./Home";
 import ProtectedRoute from "./ProtectedRoute";
 import Logout from "./Logout";
-
+import UserProfile from "./UserProfile";
 import Settings from "./Dashboard/Setting";
 
 const style = withStyles((theme) => {
@@ -79,6 +79,7 @@ class App extends Component {
                     <ProtectedRoute path="/dashboard" component={Dashboard} />
                     <ProtectedRoute path="/setting" component={Settings} />
                     <ProtectedRoute path="/logout" render={() => <Logout dispatch={this.props.dispatch} />} />
+                    <ProtectedRoute path="/user/:userId" component={UserProfile} />
                     <Route path="/" component={Home} />
                 </Switch>
             </Router>

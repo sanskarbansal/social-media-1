@@ -40,12 +40,15 @@ router.post("/login", async (req, res) => {
 router.get("/", async (req, res) => {
     // const users = await User.find({ $or: [{ firstName: /^req.query.s/ }, { username: `/^${req.query.s}/` }], select: "firstName lastName username" });
     let { s, limit = 5, page } = req.query;
+    s = `^${s}`;
     limit = parseInt(limit);
     page = parseInt(page);
+    if (s === "^") return res.json({ users: [] });
     const users = await User.find({
         $or: [{ firstName: { $regex: s, $options: "m" } }, { username: { $regex: s, $options: "m" } }],
     })
-        .select("firstName lastName username")
+        .select("firstName lastName username email mobileNumber friends")
+        .populate({ path: "friends", select: "firstName lastName username" })
         .limit(limit || 5)
         .skip((page - 1) * (limit || 5));
     res.json({

@@ -8,4 +8,6 @@ export const APIurls = {
     toggleLike: `${url}/like/toggle`,
     createComment: `${url}/comment/create`,
     searchUser: (query, page = 1, limit = 1) => `${url}/user/?s=${query}&page=${page}&limit=${limit}`,
+    sendRequest: `${url}/friend/`,
+    getUser: `${url}/friend/`,
 };

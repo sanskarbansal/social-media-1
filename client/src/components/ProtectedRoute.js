@@ -11,7 +11,7 @@ function ProtectedRoute(props) {
         },
     };
 
-    if (props.auth.isLoggedIn && props.auth.user) return <Route path={props.path} render={() => <Component {...props} />} />;
+    if (props.auth.isLoggedIn && props.auth.user) return <Route path={props.path} render={(renderProps) => <Component {...renderProps} {...props} />} />;
     return <Route path={props.path} render={() => <Redirect to={to} />} />;
 }
 const mapStateToProps = (state) => ({
